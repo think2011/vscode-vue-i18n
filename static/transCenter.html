@@ -155,7 +155,7 @@
         <h2>
           <span>{{ filePath }}</span>
           <button @click="batchTrans()">
-            {{transTasks.length ? '翻译中' : `批量根据zh-CN翻译` }}
+            {{transTasks.length ? '翻译中' : `批量根据en翻译` }}
           </button>
         </h2>
         <small>{{ i18nPath }}</small>
@@ -169,13 +169,13 @@
               @click="trans(i18nItem)"
               :disabled="loadingMap[i18nItem.key]"
             >
-              {{loadingMap[i18nItem.key] ? `翻译中..` : `根据zh-CN翻译`}}
+              {{loadingMap[i18nItem.key] ? `翻译中..` : `根据en翻译`}}
             </button>
           </h4>
 
           <ul>
             <li v-for="transItem in i18nItem.transItems" :key="transItem.lng">
-              <span class="lng" :class="{active: transItem.lng === 'zh-CN'}">{{
+              <span class="lng" :class="{active: transItem.lng === 'en'}">{{
                 transItem.lng
               }}</span>
               <input

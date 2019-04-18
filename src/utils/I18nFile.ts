@@ -62,7 +62,7 @@ class I18nFile {
       })
       .filter((item: any) => !!item.lng)
       .sort(item => {
-        return item.lng === 'zh-CN' ? -1 : 1
+        return item.lng === 'en' ? -1 : 1
       })
 
     return i18nList
