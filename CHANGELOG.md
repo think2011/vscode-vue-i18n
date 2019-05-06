@@ -1,3 +1,7 @@
+## [0.15.15] - 2019-05-06
+
+- 💫 feat: 指定翻译源语言（默认从中文 zh-CN 翻译成其他语言），可通过 `vue-i18n.sourceLocale` 配置 感谢 @antfu pr#11
+
 ## [0.14.15] - 2019-05-05
 
 - 🤦‍ fix: isVueProject path on Windows 感谢 @antfu
