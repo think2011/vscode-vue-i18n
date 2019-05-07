@@ -1,3 +1,7 @@
+## [0.15.16] - 2019-05-06
+
+- 💫 fix: FileSystemWatcher broken on Windows 感谢 @antfu pr#12
+
 ## [0.15.15] - 2019-05-06
 
 - 💫 feat: 指定翻译源语言（默认从中文 zh-CN 翻译成其他语言），可通过 `vue-i18n.sourceLocale` 配置 感谢 @antfu pr#11
