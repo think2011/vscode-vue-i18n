@@ -125,7 +125,7 @@ class I18nFile {
       }
 
       const data = this.files[item.path]
-      const [, ...keyPath] = i18nKey.split('.')
+      const keyPath = i18nKey.replace(/[^.]+\.(.+)/, '$1')
 
       return {
         ...item,
