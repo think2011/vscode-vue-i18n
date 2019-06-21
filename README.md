@@ -4,7 +4,6 @@
 
 这个插件能够帮到你方便查看和编写 vue-i18n
 
-> ✨ 目前是 alpha 版本
 
 ## 主要功能
 
@@ -44,3 +43,5 @@
 
 - @antfu
 - @lanten
+
+> ✨同时也推荐功能更完善强大的 [vue-i18n-ally@antfu](https://github.com/antfu/vue-i18n-ally)
