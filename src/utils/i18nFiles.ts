@@ -66,11 +66,10 @@ class I18nFiles {
   }
 
   getTransByApi(transItems: ITransItem[]): Promise<ITransItem[]> {
-    const sourceLocale =  Common.getSourceLocale()
+    const sourceLocale = Common.getSourceLocale()
     const cnItem = transItems.find(transItem => transItem.lng === sourceLocale)
 
     const tasks = transItems.map(transItem => {
-
       if (transItem.lng === sourceLocale) return transItem
 
       const plans = [google.translate, baidu.translate, youdao.translate]

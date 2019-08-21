@@ -3,7 +3,7 @@ import * as fg from 'fast-glob'
 import Common from './utils/Common'
 
 class AutoInit {
-  ctx = null
+  ctx: vscode.ExtensionContext
 
   constructor(ctx: vscode.ExtensionContext) {
     this.ctx = ctx
@@ -22,7 +22,7 @@ class AutoInit {
 
   async autoSet() {
     const rootPath = vscode.workspace.rootPath
-    const pattern = [`${rootPath}/**/(locales|locale)`]
+    const pattern = [`${rootPath}/**/(locales|locale|i18n|lang|langs)`]
     const result: any[] = await fg(pattern, {
       ignore: ['**/node_modules'],
       onlyDirectories: true

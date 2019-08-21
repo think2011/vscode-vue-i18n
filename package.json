@@ -5,7 +5,7 @@
   "version": "0.16.17",
   "publisher": "think2011",
   "engines": {
-    "vscode": "^1.29.0"
+    "vscode": "^1.37.0"
   },
   "categories": [
     "Other"
@@ -32,7 +32,7 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.vue-i18n.transCenter",
+        "command": "vue-i18n.transCenter",
         "title": "翻译当前文件的i18n",
         "icon": {
           "light": "./static/icon-translate.svg",
@@ -40,11 +40,11 @@
         }
       },
       {
-        "command": "extension.vue-i18n.config",
+        "command": "vue-i18n.config",
         "title": "vue-i18n: 手动配置路径"
       },
       {
-        "command": "extension.vue-i18n.auto-init",
+        "command": "vue-i18n.auto-init",
         "title": "vue-i18n: 自动配置路径"
       }
     ],
@@ -52,22 +52,22 @@
       "editor/title": [
         {
           "when": "resourceLangId == vue-html",
-          "command": "extension.vue-i18n.transCenter",
+          "command": "vue-i18n.transCenter",
           "group": "navigation"
         },
         {
           "when": "resourceLangId == vue",
-          "command": "extension.vue-i18n.transCenter",
+          "command": "vue-i18n.transCenter",
           "group": "navigation"
         },
         {
           "when": "resourceLangId == javascript",
-          "command": "extension.vue-i18n.transCenter",
+          "command": "vue-i18n.transCenter",
           "group": "navigation"
         },
         {
           "when": "resourceLangId == typescript",
-          "command": "extension.vue-i18n.transCenter",
+          "command": "vue-i18n.transCenter",
           "group": "navigation"
         }
       ]
@@ -79,7 +79,7 @@
         "vue-i18n.i18nPaths": {
           "type": "string",
           "default": "",
-          "description": "翻译文件的目录（相对于根目录）"
+          "description": "翻译文件的目录（相对于项目根目录）"
         },
         "vue-i18n.sourceLocale": {
           "type": "string",
@@ -90,21 +90,22 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "rm -rf ./out/ && tsc -p ./",
-    "watch": "rm -rf ./out/ && tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "yarn run compile",
+    "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/lodash": "^4.14.123",
-    "@types/mocha": "^2.2.42",
-    "@types/node": "^10.12.9",
-    "@types/tar": "^4.0.0",
-    "tar": "4.4.2",
-    "tslint": "^5.8.0",
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.21"
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.6",
+    "@types/node": "^10.12.21",
+    "@types/vscode": "^1.37.0",
+    "glob": "^7.1.4",
+    "mocha": "^6.1.4",
+    "typescript": "^3.3.1",
+    "tslint": "^5.12.1",
+    "vscode-test": "^1.0.2"
   },
   "dependencies": {
     "fast-glob": "^2.2.6",

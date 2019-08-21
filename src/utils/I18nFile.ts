@@ -3,7 +3,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { set, get } from 'lodash'
 
-import Common from './common';
+import Common from './common'
 
 export interface II18nItem {
   key: string
@@ -95,8 +95,7 @@ class I18nFile {
     try {
       const data = JSON.parse(fs.readFileSync(i18nFilePath, 'utf-8'))
       const isObject =
-        Reflect.apply(Object.prototype.toString, data, []) ===
-        '[object Object]'
+        Reflect.apply(Object.prototype.toString, data, []) === '[object Object]'
 
       return isObject ? data : {}
     } catch (err) {
