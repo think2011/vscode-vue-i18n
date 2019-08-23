@@ -1,5 +1,9 @@
-import Config from './Config'
+import config from './config'
 
-export const COMMANDS = {
-  initPath: `${Config.extensionName}.initPath`
+export default {
+  COMMANDS: {
+    autoInitPath: `${config.extensionName}.autoInitPath`,
+    manualInitPath: `${config.extensionName}.manualInitPath`,
+    transView: `${config.extensionName}.transView`
+  }
 }

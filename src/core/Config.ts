@@ -20,20 +20,22 @@ export default class Config {
     return paths ? paths.split(',') : []
   }
 
+  static get version() {
+    return this.extension.packageJSON.version
+  }
+
   static get hasI18nPaths() {
     return !!this.i18nPaths.length
   }
 
   static getConfig(key): any {
-    return vscode.workspace
-      .getConfiguration()
-      .get(`${this.extensionName}.${key}`)
+    return vscode.workspace.getConfiguration(this.extensionName).get(key)
   }
 
   static setConfig(key, value, isGlobal = false) {
     return vscode.workspace
-      .getConfiguration()
-      .update(`${this.extensionName}.${key}`, value, isGlobal)
+      .getConfiguration(this.extensionName)
+      .update(key, value, isGlobal)
   }
 
   static updateI18nPaths(paths: string[]) {
