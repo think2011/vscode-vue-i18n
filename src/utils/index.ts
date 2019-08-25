@@ -1,21 +1,23 @@
 import * as vscode from 'vscode'
 import Log from '../core/Log'
 
-export default class Utils {
-  static isVueProject(): Boolean {
-    const mainProject = vscode.workspace.workspaceFolders[0]
+export * from './KeyDetector'
 
-    if (!mainProject) {
-      return false
-    }
+export const KEY_REG = /(?:\$t|\$tc|\$d|\$n|\$te|this\.t|i18n\.t|[^\w]t)\(['"]([^]+?)['"]/g
 
-    try {
-      const pkgJSON = require(`${mainProject.uri.fsPath}/package.json`)
-      const { dependencies, devDependencies } = pkgJSON
+export const isVueProject = (): boolean => {
+  const mainProject = vscode.workspace.workspaceFolders[0]
 
-      return !!dependencies['vue-i18n'] || !!devDependencies['vue-i18n']
-    } catch (err) {
-      Log.error(err)
-    }
+  if (!mainProject) {
+    return false
+  }
+
+  try {
+    const pkgJSON = require(`${mainProject.uri.fsPath}/package.json`)
+    const { dependencies, devDependencies } = pkgJSON
+
+    return !!dependencies['vue-i18n'] || !!devDependencies['vue-i18n']
+  } catch (err) {
+    Log.error(err)
   }
 }

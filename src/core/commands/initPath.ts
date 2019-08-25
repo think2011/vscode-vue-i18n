@@ -8,7 +8,6 @@ import Log from '../Log'
 class InitPath {
   constructor() {
     if (Config.hasI18nPaths) {
-      Log.info(`暂无i18n目录配置`)
       return
     }
 
@@ -24,9 +23,13 @@ class InitPath {
     })
 
     Config.updateI18nPaths(result)
-    vscode.window.showInformationMessage(
-      `${Config.extensionName}:🌟已帮你配置以下目录\n ${result.join('\n')}`
-    )
+
+    const info = `${Config.extensionName}:🌟已帮你配置以下目录\n ${result.join(
+      '\n'
+    )}`
+
+    vscode.window.showInformationMessage(info)
+    Log.info(info)
   }
 
   async manualInit() {
@@ -73,13 +76,13 @@ class InitPath {
 
 const initPath = new InitPath()
 
-export const autoInit = () => {
+export const autoInitCommand = () => {
   return vscode.commands.registerCommand(meta.COMMANDS.autoInitPath, () => {
     initPath.autoInit()
   })
 }
 
-export const manualInit = () => {
+export const manualInitCommand = () => {
   return vscode.commands.registerCommand(meta.COMMANDS.manualInitPath, () => {
     initPath.manualInit()
   })

@@ -84,7 +84,7 @@
         "vue-i18n.sourceLocale": {
           "type": "string",
           "default": "zh-CN",
-          "description": "机器翻译源语言"
+          "description": "主要语言"
         }
       }
     }

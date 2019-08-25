@@ -1,15 +1,14 @@
 import * as vscode from 'vscode'
-// import KeyDetector from './utils/KeyDetector'
-// import i18nFiles from './utils/i18nFiles'
 import { Hover } from '../core/editor'
+import { KeyDetector } from '../utils'
 
 class HoverProvider extends Hover {
-  getKey() {
-    return '222222123f'
+  getKey(document: vscode.TextDocument, position: vscode.Position) {
+    return KeyDetector.getKey(document, position)
   }
 }
 
-export const hover = () => {
+export const hoverEditor = () => {
   return vscode.languages.registerHoverProvider(
     [
       { language: 'vue', scheme: '*' },

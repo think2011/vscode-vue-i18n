@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import Utils from './Utils'
 
 const I18N_PATHS_KEY = 'i18nPaths'
 
@@ -26,6 +27,10 @@ export default class Config {
 
   static get hasI18nPaths() {
     return !!this.i18nPaths.length
+  }
+
+  static get sourceLocale() {
+    return Utils.normalizeLng(this.getConfig('sourceLocale') || 'zh-CN')
   }
 
   static getConfig(key): any {

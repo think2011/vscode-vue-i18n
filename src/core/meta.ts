@@ -1,9 +1,10 @@
-import config from './config'
+import Config from './Config'
 
 export default {
   COMMANDS: {
-    autoInitPath: `${config.extensionName}.autoInitPath`,
-    manualInitPath: `${config.extensionName}.manualInitPath`,
-    transView: `${config.extensionName}.transView`
+    autoInitPath: `${Config.extensionName}.autoInitPath`,
+    manualInitPath: `${Config.extensionName}.manualInitPath`,
+    transView: `${Config.extensionName}.transView`,
+    extract: `${Config.extensionName}.extract`
   }
 }

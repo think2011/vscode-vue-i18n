@@ -6,10 +6,12 @@ import Log from './core/Log'
 import Config from './core/Config'
 import * as coreCommandsModules from './core/commands'
 
-import Utils from './Utils'
+import { isVueProject } from './Utils'
 import * as editorModules from './editor'
 
-type ModuleType = (ctx: vscode.ExtensionContext) => vscode.Disposable
+type ModuleType = (
+  ctx: vscode.ExtensionContext
+) => vscode.Disposable | vscode.Disposable[]
 
 process.on('uncaughtException', function(err) {
   Log.error(err, false)
@@ -18,14 +20,21 @@ process.on('uncaughtException', function(err) {
 export async function activate(ctx: vscode.ExtensionContext) {
   Log.info(`🌞 Activated, v${Config.version}`)
 
-  if (!(await Utils.isVueProject())) {
+  if (!(await isVueProject())) {
     Log.info('🌑 Inactive')
     return
   }
 
-  Object.values({ ...coreCommandsModules, ...editorModules }).forEach(
-    (module: ModuleType) => ctx.subscriptions.push(module(ctx))
-  )
+  const modules = Object.values({ ...coreCommandsModules, ...editorModules })
+  modules.forEach((module: ModuleType) => {
+    const disposables = module(ctx)
+
+    if (Array.isArray(disposables)) {
+      ctx.subscriptions.push(...disposables)
+    } else {
+      ctx.subscriptions.push(disposables)
+    }
+  })
 
   // [
   //   (require('./autoInit').default,
