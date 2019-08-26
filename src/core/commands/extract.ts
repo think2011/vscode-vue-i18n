@@ -3,6 +3,7 @@ import * as vscode from 'vscode'
 import meta from '../meta'
 import * as path from 'path'
 import { i18nFile } from '../i18nFile'
+import Config from '../Config'
 
 const toCamelCase = str => {
   return str.replace(/(-\w)/g, $1 => {
@@ -48,6 +49,27 @@ const onExtract = async ({
   if (!key) {
     return
   }
+
+  // 替换内容
+  vscode.window.activeTextEditor.edit(editBuilder => {
+    const { start, end } = vscode.window.activeTextEditor.selection
+
+    editBuilder.replace(
+      new vscode.Range(start, end),
+      template.replace(/{key}/g, key)
+    )
+  })
+
+  // 翻译内容
+  const i18n = i18nFile.getFileByFilepath(filepath)
+  let transData = i18n.getI18n(key)
+  const mainTrans = transData.find(item => item.lng === Config.sourceLocale)
+
+  mainTrans.text = text
+  transData = await i18n.transI18n(transData)
+
+  // 写入翻译
+  i18n.writeI18n(transData)
 }
 
 export const extract = () => {

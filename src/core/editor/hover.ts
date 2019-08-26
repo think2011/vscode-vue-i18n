@@ -9,7 +9,7 @@ export abstract class Hover implements vscode.HoverProvider {
     }
 
     const i18n = i18nFile.getFileByFilepath(document.fileName)
-    const transData = i18n.getTrans(key)
+    const transData = i18n.getI18n(key)
     const transText = transData
       .map(transItem => {
         const commands = [

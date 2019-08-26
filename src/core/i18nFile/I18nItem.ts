@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
-import { get } from 'lodash'
+import { google, baidu, youdao } from 'translation.js'
+import { get, set } from 'lodash'
 import * as fs from 'fs'
 import Utils from '../Utils'
 import Config from '../Config'
@@ -15,6 +16,7 @@ interface ILng {
 }
 
 interface ITransData extends ILng {
+  id: string
   keypath: string
   key: string
   text: any
@@ -110,7 +112,56 @@ export class I18nItem {
     }
   }
 
-  getTrans(key: string): ITransData[] {
+  async transByApi({
+    text,
+    from = Config.sourceLocale,
+    to
+  }: {
+    text: string
+    from: string
+    to: string
+  }) {
+    const plans = [google, baidu, youdao]
+    const errors: Error[] = []
+
+    let res = undefined
+    for (const plan of plans) {
+      try {
+        res = await plan.translate({ text, from, to })
+        break
+      } catch (e) {
+        errors.push(e)
+      }
+    }
+
+    const result = res && res.result && res.result[0]
+    if (!result) throw errors
+
+    return result
+  }
+
+  transI18n(transData: ITransData[]): Promise<ITransData[]> {
+    const mainTrans = transData.find(item => item.lng === Config.sourceLocale)
+
+    const tasks = transData.map(async transItem => {
+      if (transItem === mainTrans) {
+        return transItem
+      }
+
+      transItem.text =
+        (await this.transByApi({
+          text: mainTrans.text,
+          from: Config.sourceLocale,
+          to: transItem.lng
+        })) || transItem.text
+
+      return transItem
+    })
+
+    return Promise.all(tasks)
+  }
+
+  getI18n(key: string): ITransData[] {
     return this.lngs.map(lngItem => {
       let i18nFilepath = lngItem.filepath
       let keypath = key
@@ -130,13 +181,36 @@ export class I18nItem {
 
       return {
         ...lngItem,
-        filepath: i18nFilepath,
+        id: Math.random()
+          .toString(36)
+          .substr(-6),
         key,
         keypath,
+        filepath: i18nFilepath,
         text: get(fileCache[i18nFilepath], keypath)
       }
     })
   }
 
-  writeTrans() {}
+  writeI18n(transData: ITransData[]): Promise<any> {
+    const writePromise = transData.map(({ filepath, keypath, text }) => {
+      return new Promise((resolve, reject) => {
+        if (!fileCache[filepath]) {
+          fileCache[filepath] = this.readFile(filepath)
+        }
+        const file = fileCache[filepath]
+
+        set(file, keypath, text)
+        fs.writeFile(filepath, JSON.stringify(file, null, 2), err => {
+          if (err) {
+            return reject(err)
+          }
+
+          resolve()
+        })
+      })
+    })
+
+    return Promise.all(writePromise)
+  }
 }

@@ -17,18 +17,23 @@ export abstract class Annotation {
 
   constructor() {
     const { disposables } = this
-    const debounceUpdate = debounce(() => this.update(), 300)
-    const i18nDirWatcher = vscode.workspace.createFileSystemWatcher(
-      `${Config.i18nPaths}/**`
+    const debounceUpdate = debounce(() => this.update(), 800)
+
+    Config.i18nPaths.forEach(i18nPath => {
+      const i18nDirWatcher = vscode.workspace.createFileSystemWatcher(
+        `${i18nPath}/**`
+      )
+
+      i18nDirWatcher.onDidChange(debounceUpdate)
+      i18nDirWatcher.onDidCreate(debounceUpdate)
+      i18nDirWatcher.onDidDelete(debounceUpdate)
+      disposables.push(i18nDirWatcher)
+    })
+
+    disposables.push(
+      vscode.window.onDidChangeActiveTextEditor(debounceUpdate),
+      vscode.workspace.onDidChangeTextDocument(debounceUpdate)
     )
-
-    i18nDirWatcher.onDidChange(debounceUpdate)
-    i18nDirWatcher.onDidCreate(debounceUpdate)
-    i18nDirWatcher.onDidDelete(debounceUpdate)
-
-    disposables.push(i18nDirWatcher)
-    disposables.push(vscode.window.onDidChangeActiveTextEditor(debounceUpdate))
-    disposables.push(vscode.workspace.onDidChangeTextDocument(debounceUpdate))
   }
 
   update() {
@@ -42,6 +47,9 @@ export abstract class Annotation {
     const decorations = []
     const unuseDecorations = []
 
+    activeTextEditor.setDecorations(unuseDecorationType, [])
+    activeTextEditor.setDecorations(textEditorDecorationType, [])
+
     // 从文本里遍历生成中文注释
     let match = null
     while ((match = this.KEY_REG.exec(text))) {
@@ -49,7 +57,7 @@ export abstract class Annotation {
       const matchKey = match[0]
       const key = matchKey.replace(new RegExp(this.KEY_REG), '$1')
       const i18n = i18nFile.getFileByFilepath(document.fileName)
-      const trans = i18n.getTrans(key)
+      const trans = i18n.getI18n(key)
       const { text: mainText = '' } =
         trans.find(transItem => transItem.lng === Config.sourceLocale) || {}
 
@@ -77,10 +85,6 @@ export abstract class Annotation {
 
       decorations.push(decoration)
       activeTextEditor.setDecorations(textEditorDecorationType, decorations)
-    }
-
-    if (!text) {
-      activeTextEditor.setDecorations(textEditorDecorationType, [])
     }
   }
 }

@@ -10,7 +10,7 @@ class ExtractProvider extends Extract {
         arguments: [
           {
             ...params,
-            template: `$t({key})`
+            template: `{{ $t('{key}') }}`
           }
         ]
       },
@@ -20,7 +20,7 @@ class ExtractProvider extends Extract {
         arguments: [
           {
             ...params,
-            template: `i18n.t({key})`
+            template: `i18n.t('{key}')`
           }
         ]
       }
