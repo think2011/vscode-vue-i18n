@@ -22,10 +22,11 @@
 
     html,
     body {
+      height: 100%;
       margin: 0;
       padding: 0;
       color: #a7b9d1;
-      background: #2d323c;
+      background: linear-gradient(to right, #282c35, #282c35);
     }
 
     ul,
@@ -153,7 +154,7 @@
     <div id="app" v-cloak class="main-container">
       <div class="header">
         <h2>
-          <span>{{ filePath }}</span>
+          <span>{{ shortFilename }}</span>
           <button @click="batchTrans()">
             {{transTasks.length ? '翻译中' : `批量根据${sourceLocale}翻译` }}
           </button>
@@ -175,9 +176,11 @@
 
           <ul>
             <li v-for="transItem in i18nItem.transItems" :key="transItem.lng">
-              <span class="lng" :class="{active: transItem.lng === sourceLocale}">{{
-                transItem.lng
-              }}</span>
+              <span
+                class="lng"
+                :class="{active: transItem.lng === sourceLocale}"
+                >{{ transItem.lng }}</span
+              >
               <input
                 @blur="writeTrans(i18nItem)"
                 type="text"
@@ -192,86 +195,86 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
     <script>
-      const vscode = acquireVsCodeApi();
+      const vscode = acquireVsCodeApi()
 
-      const EVENT_MAP = {
-        ready: "ready",
-        allI18n: "allI18n",
-        trans: "trans",
-        writeTrans: "writeTrans"
-      };
+      const EVENT_TYPE = {
+        READY: 0,
+        ALL_TRANS: 1,
+        TRANS: 2,
+        WRITE_FILE: 3
+      }
 
       window.app = new Vue({
-        el: "#app",
+        el: '#app',
         data() {
           return {
-            filePath: null,
+            shortFilename: null,
             i18n: [],
             loadingMap: {},
             transTasks: [],
             emitTransTimer: null,
             sourceLocale: 'zh-CN'
-          };
+          }
         },
         computed: {
           i18nPath() {
             if (!this.i18n.length) {
-              return "";
+              return ''
             }
 
-            return this.i18n[0].transItems[0].rootPath;
+            return this.i18n[0].transItems[0].rootPath
           }
         },
         created() {
-          window.addEventListener("message", ({ data: eventData }) => {
-            const { data, type } = eventData;
+          window.addEventListener('message', ({ data: eventData }) => {
+            const { data, type } = eventData
             switch (type) {
-              case EVENT_MAP.allI18n:
-                this.filePath = data.filePath;
-                this.i18n = data.i18n;
-                this.sourceLocale = data.sourceLocale;
-                break;
+              case EVENT_MAP.ALL_TRANS:
+                this.shortFilename = data.shortFilename
+                this.i18n = data.i18n
+                this.sourceLocale = data.sourceLocale
+                break
 
               case EVENT_MAP.trans:
                 const matchIndex = this.i18n.findIndex(
                   i18nItem => i18nItem.key === data.key
-                );
+                )
 
-                this.$set(this.i18n, matchIndex, data);
-                this.$delete(this.loadingMap, data.key);
-                break;
+                this.$set(this.i18n, matchIndex, data)
+                this.$delete(this.loadingMap, data.key)
+                break
 
               default:
               //
             }
-          });
+          })
+
+          vscode.postMessage({ type: EVENT_MAP.READY })
         },
         methods: {
           batchTrans() {
-            this.i18n.forEach(i18Item => this.trans(i18Item));
+            this.i18n.forEach(i18Item => this.trans(i18Item))
           },
           trans(i18nItem) {
-            if (this.loadingMap[i18nItem.key]) return;
+            if (this.loadingMap[i18nItem.key]) return
 
-            this.$set(this.loadingMap, i18nItem.key, true);
-            this.transTasks.push(i18nItem);
+            this.$set(this.loadingMap, i18nItem.key, true)
+            this.transTasks.push(i18nItem)
 
-            clearTimeout(this.emitTransTimer);
+            clearTimeout(this.emitTransTimer)
             this.emitTransTimer = setTimeout(() => {
               vscode.postMessage({
                 type: EVENT_MAP.trans,
                 data: this.transTasks
-              });
-              this.transTasks = [];
-            }, 300);
+              })
+              this.transTasks = []
+            }, 300)
           },
           writeTrans(i18nItem) {
-            vscode.postMessage({ type: EVENT_MAP.writeTrans, data: i18nItem });
+            vscode.postMessage({ type: EVENT_MAP.writeTrans, data: i18nItem })
           }
         }
-      });
-
-      vscode.postMessage({ type: EVENT_MAP.ready });
+      })
     </script>
   </body>
 </html>

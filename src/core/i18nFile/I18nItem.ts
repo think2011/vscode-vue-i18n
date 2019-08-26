@@ -15,7 +15,7 @@ interface ILng {
   lng: string
 }
 
-interface ITransData extends ILng {
+export interface ITransData extends ILng {
   id: string
   keypath: string
   key: string
@@ -118,7 +118,7 @@ export class I18nItem {
     to
   }: {
     text: string
-    from: string
+    from?: string
     to: string
   }) {
     const plans = [google, baidu, youdao]

@@ -11,8 +11,8 @@ export class KeyDetector {
     return [...new Set(keys)]
   }
 
-  static getKeyByFilepath(filePath: string) {
-    const file: string = fs.readFileSync(filePath, 'utf-8')
+  static getKeyByFilepath(filepath: string) {
+    const file: string = fs.readFileSync(filepath, 'utf-8')
     return this.getKeyByContent(file)
   }
 
