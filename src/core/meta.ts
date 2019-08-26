@@ -5,6 +5,8 @@ export default {
     autoInitPath: `${Config.extensionName}.autoInitPath`,
     manualInitPath: `${Config.extensionName}.manualInitPath`,
     transView: `${Config.extensionName}.transView`,
-    extract: `${Config.extensionName}.extract`
+    extract: `${Config.extensionName}.extract`,
+    editI18n: `${Config.extensionName}.editI18n`,
+    delI18n: `${Config.extensionName}.delI18n`
   }
 }
