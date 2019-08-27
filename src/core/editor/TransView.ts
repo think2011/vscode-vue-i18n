@@ -61,7 +61,7 @@ export abstract class TransView {
 
     const { webview } = this.panel
     webview.html = fs.readFileSync(
-      path.resolve(Config.extension.extensionPath, 'src/editor/transView.html'),
+      path.resolve(Config.extension.extensionPath, 'static/transView.html'),
       'utf-8'
     )
 
