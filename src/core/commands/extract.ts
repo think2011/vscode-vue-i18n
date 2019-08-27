@@ -50,6 +50,14 @@ const onExtract = async ({
     return
   }
 
+  const i18n = i18nFile.getFileByFilepath(filepath)
+
+  // 重复检测
+  const isOverride = await i18n.overrideCheck(key)
+  if (!isOverride) {
+    return
+  }
+
   // 替换内容
   vscode.window.activeTextEditor.edit(editBuilder => {
     const { start, end } = vscode.window.activeTextEditor.selection
@@ -61,7 +69,6 @@ const onExtract = async ({
   })
 
   // 翻译内容
-  const i18n = i18nFile.getFileByFilepath(filepath)
   let transData = i18n.getI18n(key)
   const mainTrans = transData.find(item => item.lng === Config.sourceLocale)
 

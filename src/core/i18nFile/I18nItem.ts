@@ -140,6 +140,41 @@ export class I18nItem {
     return result
   }
 
+  async overrideCheck(keypath): Promise<boolean> {
+    let [{ text }] = this.getI18n(keypath)
+    let overrideKey = text ? keypath : undefined
+
+    if (!overrideKey) {
+      let tempKeypath = keypath.split('.')
+
+      while (tempKeypath.length) {
+        tempKeypath.pop()
+
+        const tempOverrideKey = tempKeypath.join('.')
+        const [{ text: tempText }] = this.getI18n(tempOverrideKey)
+
+        if (typeof tempText !== 'object' && typeof tempText !== undefined) {
+          overrideKey = tempOverrideKey
+          text = tempText
+          break
+        }
+      }
+    }
+
+    if (!overrideKey) {
+      return true
+    }
+
+    const overrideText = '覆盖'
+    const isOverride = await vscode.window.showInformationMessage(
+      `已有 ${overrideKey}:${text}, 覆盖吗？`,
+      { modal: true },
+      overrideText
+    )
+
+    return isOverride === overrideText
+  }
+
   transI18n(transData: ITransData[]): Promise<ITransData[]> {
     const mainTrans = transData.find(item => item.lng === Config.sourceLocale)
 
@@ -196,12 +231,14 @@ export class I18nItem {
         key,
         keypath,
         filepath: i18nFilepath,
-        text: get(fileCache[i18nFilepath], keypath)
+        text: keypath
+          ? get(fileCache[i18nFilepath], keypath)
+          : fileCache[i18nFilepath]
       }
     })
   }
 
-  writeI18n(transData: ITransData[]): Promise<any> {
+  async writeI18n(transData: ITransData[]): Promise<any> {
     const writePromise = transData.map(({ filepath, keypath, text }) => {
       return new Promise((resolve, reject) => {
         if (!fileCache[filepath]) {

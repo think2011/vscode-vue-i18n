@@ -33,6 +33,11 @@ export const editI18nCommand = () => {
         return
       }
 
+      const isOverride = await i18n.overrideCheck(key)
+      if (!isOverride) {
+        return
+      }
+
       lngTransData.text = text
       i18n.writeI18n(transData)
     }
