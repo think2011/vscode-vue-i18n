@@ -154,38 +154,35 @@
     <div id="app" v-cloak class="main-container">
       <div class="header">
         <h2>
-          <span>{{ shortFilename }}</span>
+          <span>🔖 {{ shortFileName }}</span>
           <button @click="batchTrans()">
-            {{transTasks.length ? '翻译中' : `批量根据${sourceLocale}翻译` }}
+            {{working ? '翻译中' : `批量根据${sourceLocale}翻译` }}
           </button>
         </h2>
-        <small>{{ i18nPath }}</small>
+        <small>当前文件共有{{ keyTotal }}条文案</small>
       </div>
 
       <ul class="i18n-table">
-        <li v-for="(i18nItem, index) in i18n" :key="i18nItem.key" class="item">
+        <li v-for="(transItem, key, index) in allTrans" :key="key" class="item">
           <h4>
-            <span>{{ `#${index+1} ${i18nItem.key}` }}</span>
-            <button
-              @click="trans(i18nItem)"
-              :disabled="loadingMap[i18nItem.key]"
-            >
-              {{loadingMap[i18nItem.key] ? `翻译中..` : `根据${sourceLocale}翻译`}}
+            <span>{{ `#${index+1} ${key}` }}</span>
+            <button @click="trans(key, transItem)" :disabled="loadingMap[key]">
+              {{loadingMap[key] ? `翻译中..` : `根据${sourceLocale}翻译`}}
             </button>
           </h4>
 
           <ul>
-            <li v-for="transItem in i18nItem.transItems" :key="transItem.lng">
+            <li v-for="i18nItem in transItem" :key="transItem.lng">
               <span
                 class="lng"
-                :class="{active: transItem.lng === sourceLocale}"
-                >{{ transItem.lng }}</span
+                :class="{active: i18nItem.lng === sourceLocale}"
+                >{{ i18nItem.lng }}</span
               >
               <input
-                @blur="writeTrans(i18nItem)"
+                @blur="writeFile(i18nItem)"
                 type="text"
-                v-model="transItem.data"
-                placeholder="空"
+                v-model="i18nItem.text"
+                placeholder="-"
               />
             </li>
           </ul>
@@ -208,8 +205,8 @@
         el: '#app',
         data() {
           return {
-            shortFilename: null,
-            i18n: [],
+            shortFileName: '',
+            allTrans: {},
             loadingMap: {},
             transTasks: [],
             emitTransTimer: null,
@@ -217,31 +214,27 @@
           }
         },
         computed: {
-          i18nPath() {
-            if (!this.i18n.length) {
-              return ''
-            }
-
-            return this.i18n[0].transItems[0].rootPath
+          keyTotal() {
+            return Object.keys(this.allTrans).length
+          },
+          working() {
+            return Object.values(this.loadingMap).find(Boolean)
           }
         },
         created() {
           window.addEventListener('message', ({ data: eventData }) => {
             const { data, type } = eventData
             switch (type) {
-              case EVENT_MAP.ALL_TRANS:
-                this.shortFilename = data.shortFilename
-                this.i18n = data.i18n
+              case EVENT_TYPE.ALL_TRANS:
+                this.shortFileName = data.shortFileName
                 this.sourceLocale = data.sourceLocale
+                this.allTrans = data.allTrans
                 break
 
-              case EVENT_MAP.trans:
-                const matchIndex = this.i18n.findIndex(
-                  i18nItem => i18nItem.key === data.key
-                )
-
-                this.$set(this.i18n, matchIndex, data)
-                this.$delete(this.loadingMap, data.key)
+              case EVENT_TYPE.TRANS:
+                const { key, trans } = data
+                this.$set(this.allTrans, key, trans)
+                this.$delete(this.loadingMap, key)
                 break
 
               default:
@@ -249,29 +242,33 @@
             }
           })
 
-          vscode.postMessage({ type: EVENT_MAP.READY })
+          vscode.postMessage({ type: EVENT_TYPE.READY })
         },
         methods: {
           batchTrans() {
-            this.i18n.forEach(i18Item => this.trans(i18Item))
+            Object.entries(this.allTrans).forEach(([key, transItem]) =>
+              this.trans(key, transItem)
+            )
           },
-          trans(i18nItem) {
-            if (this.loadingMap[i18nItem.key]) return
+          trans(key, transItem) {
+            if (this.loadingMap[key]) {
+              return
+            }
 
-            this.$set(this.loadingMap, i18nItem.key, true)
-            this.transTasks.push(i18nItem)
-
-            clearTimeout(this.emitTransTimer)
-            this.emitTransTimer = setTimeout(() => {
-              vscode.postMessage({
-                type: EVENT_MAP.trans,
-                data: this.transTasks
-              })
-              this.transTasks = []
-            }, 300)
+            this.$set(this.loadingMap, key, true)
+            vscode.postMessage({
+              type: EVENT_TYPE.TRANS,
+              data: {
+                key,
+                trans: transItem
+              }
+            })
           },
-          writeTrans(i18nItem) {
-            vscode.postMessage({ type: EVENT_MAP.writeTrans, data: i18nItem })
+          writeFile(i18nItem) {
+            vscode.postMessage({
+              type: EVENT_TYPE.WRITE_FILE,
+              data: [i18nItem]
+            })
           }
         }
       })

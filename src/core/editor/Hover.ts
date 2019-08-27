@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import { i18nFile } from '../i18nFile'
 import meta from '../meta'
+import Config from '../Config'
 
 export abstract class Hover implements vscode.HoverProvider {
   createCommandUrl({ name, command, params, disabled = false }) {
@@ -22,14 +23,6 @@ export abstract class Hover implements vscode.HoverProvider {
     const transText = transData
       .map(transItem => {
         const commands = [
-          this.createCommandUrl({
-            name: '译',
-            command: meta.COMMANDS.editI18n,
-            params: {
-              key: transItem.key,
-              filepath: transItem.filepath
-            }
-          }),
           this.createCommandUrl({
             name: '✎',
             command: meta.COMMANDS.editI18n,
@@ -56,9 +49,28 @@ export abstract class Hover implements vscode.HoverProvider {
       })
       .join('\n')
 
+    const transCommand = this.createCommandUrl({
+      name: '译',
+      command: meta.COMMANDS.transView,
+      params: {
+        key,
+        filepath: document.fileName
+      }
+    })
+
+    const delCommand = this.createCommandUrl({
+      name: '删',
+      command: meta.COMMANDS.transView,
+      params: {
+        key,
+        filepath: document.fileName
+      }
+    })
+
     const markdownText = new vscode.MarkdownString(`
 ||||
 |---:|---|---:|
+|${Config.extensionName.toUpperCase()}||${transCommand} ${delCommand}|
 ${transText}
 ||||`)
     markdownText.isTrusted = true

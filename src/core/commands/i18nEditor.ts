@@ -25,7 +25,7 @@ export const editI18nCommand = () => {
       )
 
       const text = await vscode.window.showInputBox({
-        prompt: `编辑文案`,
+        prompt: `${key}`,
         value: lngTransData.text
       })
 
@@ -56,7 +56,7 @@ export const delI18nCommand = () => {
 
       const recoverText = '恢复'
       const result = await vscode.window.showInformationMessage(
-        `${Config.extensionName}:👌 已删除文案【${text}】`,
+        `${Config.extensionName}: 🚮 ${text}`,
         recoverText
       )
 

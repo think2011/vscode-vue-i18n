@@ -1,10 +1,11 @@
 import * as vscode from 'vscode'
-import meta from '../meta'
-import { ITransData } from '../i18nFile/I18nItem'
 import * as fs from 'fs'
 import * as path from 'path'
+
+import meta from '../meta'
 import Config from '../Config'
 import { i18nFile } from '../i18nFile/I18nFile'
+import { ITransData } from '../i18nFile/I18nItem'
 import Log from '../Log'
 
 const EVENT_TYPE = {
@@ -17,26 +18,29 @@ const EVENT_TYPE = {
 export abstract class TransView {
   disposables: vscode.Disposable[] = []
   panel: vscode.WebviewPanel
+  filepath: string
 
   constructor() {
-    this.register()
+    this.init()
   }
 
-  abstract getKeysByFilepath(filepath): ITransData[]
+  abstract getKeysByFilepath(filepath): string[]
 
-  private register() {
-    const cmd = vscode.commands.registerCommand(meta.COMMANDS.transView, () => {
-      this.createPanel()
-    })
+  private init() {
+    const cmd = vscode.commands.registerCommand(
+      meta.COMMANDS.transView,
+      ({
+        filepath = vscode.window.activeTextEditor.document.fileName
+      } = {}) => {
+        this.filepath = filepath
+        this.createPanel()
+      }
+    )
 
     this.disposables.push(cmd)
   }
 
-  get filepath() {
-    return vscode.window.activeTextEditor.document.fileName
-  }
-
-  get shortFilename() {
+  get shortFileName() {
     return this.filepath
       .split(path.sep)
       .slice(-3)
@@ -57,56 +61,80 @@ export abstract class TransView {
 
     const { webview } = this.panel
     webview.html = fs.readFileSync(
-      path.resolve(Config.extension.extensionPath, 'editor/transView.html'),
+      path.resolve(Config.extension.extensionPath, 'src/editor/transView.html'),
       'utf-8'
     )
 
     webview.onDidReceiveMessage(this.onMessage.bind(this))
 
+    // 切换回 webview
+    const viewChangeWatcher = this.panel.onDidChangeViewState(webview => {
+      if (webview.webviewPanel.active) {
+        this.postAllTrans()
+      }
+    })
+
+    // 更换文件
+    const fileWatcher = vscode.window.onDidChangeActiveTextEditor(() => {
+      const activeDocument = vscode.window.activeTextEditor.document
+      const isSameOrNotFile =
+        activeDocument.uri.scheme !== 'file' ||
+        activeDocument.fileName === this.filepath
+
+      if (isSameOrNotFile) {
+        return
+      }
+
+      this.filepath = activeDocument.fileName
+      this.postAllTrans()
+    })
+
     this.panel.onDidDispose(() => {
+      viewChangeWatcher.dispose()
+      fileWatcher.dispose()
       this.panel = null
     })
   }
 
-  onMessage({ type, data }) {
+  postAllTrans() {
+    const i18n = i18nFile.getFileByFilepath(this.filepath)
+    const keys = this.getKeysByFilepath(this.filepath)
+    const allTrans = keys.reduce((acc, key) => {
+      acc[key] = i18n.getI18n(key)
+      return acc
+    }, {})
+
+    this.panel.webview.postMessage({
+      type: EVENT_TYPE.ALL_TRANS,
+      data: {
+        shortFileName: this.shortFileName,
+        sourceLocale: Config.sourceLocale,
+        allTrans
+      }
+    })
+  }
+
+  async onMessage({ type, data }) {
     const { webview } = this.panel
     const i18n = i18nFile.getFileByFilepath(this.filepath)
 
     switch (type) {
       case EVENT_TYPE.READY:
-        const keys = this.getKeysByFilepath(this.filepath)
-
-        console.log(keys)
-
-        webview.postMessage({
-          type: EVENT_TYPE.ALL_TRANS,
-          data: {
-            shortFilename: this.shortFilename,
-            allTrans: this.getKeysByFilepath(this.filepath),
-            sourceLocale: Config.sourceLocale
-          }
-        })
+        this.postAllTrans()
         break
 
       case EVENT_TYPE.TRANS:
-        data.forEach(async (transItem: ITransData) => {
-          try {
-            const transText = await i18n.transByApi({
-              text: transItem.text,
-              from: Config.sourceLocale,
-              to: transItem.lng
-            })
+        const { key, trans } = data
+        const transData = await i18n.transI18n(trans)
 
-            transItem.text = transText
-            webview.postMessage({
-              type: EVENT_TYPE.TRANS,
-              data: transItem
-            })
-            i18n.writeI18n([transItem])
-          } catch (err) {
-            Log.error(err)
+        webview.postMessage({
+          type: EVENT_TYPE.TRANS,
+          data: {
+            key,
+            trans: transData
           }
         })
+        i18n.writeI18n(transData)
         break
 
       case EVENT_TYPE.WRITE_FILE:
