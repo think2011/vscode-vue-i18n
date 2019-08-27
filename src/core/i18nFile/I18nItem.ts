@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import * as path from 'path'
 import { google, baidu, youdao } from 'translation.js'
-import { get, set } from 'lodash'
+import { get, set, omit } from 'lodash'
 import * as fs from 'fs'
 import Utils from '../Utils'
 import Config from '../Config'
@@ -166,9 +166,7 @@ export class I18nItem {
 
     transData.forEach(({ filepath, keypath }) => {
       const file = fileCache[filepath]
-
-      Reflect.deleteProperty(file, keypath)
-      fs.writeFileSync(filepath, JSON.stringify(file, null, 2))
+      fs.writeFileSync(filepath, JSON.stringify(omit(file, keypath), null, 2))
     })
   }
 
