@@ -1,8 +1,8 @@
 {
   "name": "vue-i18n",
-  "displayName": "Vue i18n - Alpha",
-  "description": "帮你更好的写vue i18n，目前是 alpha 版本",
-  "version": "1.0.0",
+  "displayName": "Vue i18n",
+  "description": "🌎这个插件能够帮到你方便浏览和编写 Vue i18n",
+  "version": "1.0.1",
   "publisher": "think2011",
   "engines": {
     "vscode": "^1.37.0"
