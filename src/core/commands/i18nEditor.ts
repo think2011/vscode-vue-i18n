@@ -73,3 +73,25 @@ export const delI18nCommand = () => {
     }
   )
 }
+
+export const removeI18nCommand = () => {
+  return vscode.commands.registerCommand(
+    meta.COMMANDS.removeI18n,
+    async ({ filepath, key }) => {
+      const i18n = i18nFile.getFileByFilepath(filepath)
+      const transData = i18n.getI18n(key)
+
+      i18n.removeI18n(key)
+
+      const recoverText = '恢复'
+      const result = await vscode.window.showInformationMessage(
+        `${Config.extensionName}: 🚮 ${key}`,
+        recoverText
+      )
+
+      if (result === recoverText) {
+        i18n.writeI18n(transData)
+      }
+    }
+  )
+}

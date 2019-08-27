@@ -161,6 +161,17 @@ export class I18nItem {
     return Promise.all(tasks)
   }
 
+  removeI18n(key: string) {
+    const transData = this.getI18n(key)
+
+    transData.forEach(({ filepath, keypath }) => {
+      const file = fileCache[filepath]
+
+      Reflect.deleteProperty(file, keypath)
+      fs.writeFileSync(filepath, JSON.stringify(file, null, 2))
+    })
+  }
+
   getI18n(key: string): ITransData[] {
     return this.lngs.map(lngItem => {
       let i18nFilepath = lngItem.filepath

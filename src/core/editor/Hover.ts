@@ -60,7 +60,7 @@ export abstract class Hover implements vscode.HoverProvider {
 
     const delCommand = this.createCommandUrl({
       name: '删',
-      command: meta.COMMANDS.transView,
+      command: meta.COMMANDS.removeI18n,
       params: {
         key,
         filepath: document.fileName
