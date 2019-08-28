@@ -2,7 +2,7 @@
   "name": "vue-i18n",
   "displayName": "Vue i18n",
   "description": "🔖 这个插件能够帮到你方便浏览和编写 Vue i18n",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "publisher": "think2011",
   "engines": {
     "vscode": "^1.37.0"
