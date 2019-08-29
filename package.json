@@ -90,6 +90,7 @@
     }
   },
   "scripts": {
+    "preinstall": "git submodule update --init --recursive",
     "deploy": "vsce publish --yarn",
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
