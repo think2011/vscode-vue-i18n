@@ -1,9 +1,11 @@
-import './GLOBAL_META'
-
 import * as vscode from 'vscode'
 
-import Log from './core/Log'
+// 初始化全局配置
 import Config from './core/Config'
+Config.extAuthor = 'think2011'
+Config.extName = 'vue-i18n'
+
+import Log from './core/Log'
 import * as coreCommandsModules from './core/commands'
 
 import { isVueProject } from './Utils'
@@ -18,7 +20,7 @@ process.on('uncaughtException', function(err) {
 })
 
 export async function activate(ctx: vscode.ExtensionContext) {
-  Log.info(`🌞 Activated, v${Config.version}`)
+  Log.info(`🌞 ${Config.extensionName} Activated, v${Config.version}`)
 
   if (!(await isVueProject())) {
     Log.info('🌑 Inactive')
@@ -35,16 +37,6 @@ export async function activate(ctx: vscode.ExtensionContext) {
       ctx.subscriptions.push(disposables)
     }
   })
-
-  // [
-  //   (require('./autoInit').default,
-  //   require('./guide').default,
-  //   require('./hint').default,
-  //   require('./extract').default,
-  //   require('./completion').default,
-  //   require('./transCenter').default,
-  //   require('./annotation').default)
-  // ].forEach(module => ctx.subscriptions.push(module(ctx)))
 }
 
 export function deactivate() {

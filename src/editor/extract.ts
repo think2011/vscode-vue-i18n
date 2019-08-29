@@ -2,6 +2,10 @@ import { Extract } from '../core/editor'
 import * as vscode from 'vscode'
 
 class ExtractProvider extends Extract {
+  keyReplace(template) {
+    return key => template.replace(/{key}/g, key)
+  }
+
   getCommands(params) {
     return [
       {
@@ -10,7 +14,7 @@ class ExtractProvider extends Extract {
         arguments: [
           {
             ...params,
-            template: `{{ $t('{key}') }}`
+            keyReplace: this.keyReplace(`{{ $t('{key}') }}`)
           }
         ]
       },
@@ -20,7 +24,7 @@ class ExtractProvider extends Extract {
         arguments: [
           {
             ...params,
-            template: `i18n.t('{key}')`
+            keyReplace: this.keyReplace(`i18n.t('{key}')`)
           }
         ]
       }

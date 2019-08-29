@@ -15,7 +15,7 @@
 </p>
 
 <p align="center">
-这个插件能够帮到你方便查看和编写 vue-i18n 🎉
+这个插件能够帮到你方便查看和编写 <a href="https://github.com/kazupon/vue-i18n">vue-i18n</a> 🎉
 </p>
 
 <h2 align="center"> ⚡ 主要功能 </h2>
@@ -83,15 +83,6 @@
 - [ ] 快捷跳转到对应翻译文件
 - [ ] 翻译率提示
 
-## 👏特别感谢
-
-谢谢你帮忙完善了插件
-
-- @antfu
-- @lanten
-
-> ✨同时也推荐功能更为强大的 [vue-i18n-ally@antfu](https://github.com/antfu/vue-i18n-ally)
-
 ## QA
 
 > 怎么安装？
@@ -101,3 +92,12 @@
 > 怎么不开 Issues?
 
 估计很长一段时间里都比较忙，而且懒，如果你遇到了**实在难以解决的问题**或者非要~~提需求~~ **吐槽**，那你给我发封邮件吧 <452125301.hzplay@gmail.com>，要是可以贡献 PR 那真的太棒了 🙂
+
+## 👏特别感谢
+
+谢谢你帮忙完善了插件
+
+- @antfu
+- @lanten
+
+> ✨同时也推荐功能更为强大的 [vue-i18n-ally@antfu](https://github.com/antfu/vue-i18n-ally)
