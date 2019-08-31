@@ -2,7 +2,7 @@
   "name": "vue-i18n",
   "displayName": "Vue i18n",
   "description": "🔖 这个插件能够帮到你方便浏览和编写 Vue i18n",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "publisher": "think2011",
   "engines": {
     "vscode": "^1.37.0"
@@ -90,7 +90,7 @@
     }
   },
   "scripts": {
-    "preinstall": "git submodule update --init --recursive && cd src/core && yarn",
+    "preinstall": "git submodule update --init --recursive",
     "deploy": "vsce publish --yarn",
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
@@ -104,6 +104,7 @@
     "@types/mocha": "^5.2.6",
     "@types/node": "^10.12.21",
     "@types/vscode": "^1.37.0",
+    "@types/yaml": "^1.0.2",
     "glob": "^7.1.4",
     "mocha": "^6.1.4",
     "tslint": "^5.12.1",
@@ -114,6 +115,7 @@
   "dependencies": {
     "fast-glob": "^2.2.6",
     "lodash": "^4.17.15",
-    "translation.js": "^0.7.5"
+    "translation.js": "^0.7.5",
+    "yaml": "^1.6.0"
   }
 }

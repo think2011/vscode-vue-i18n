@@ -18,6 +18,13 @@
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
+"@babel/runtime@^7.4.5":
+  version "7.5.5"
+  resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.5.5.tgz#74fba56d35efbeca444091c7850ccd494fd2f132"
+  integrity sha1-dPulbTXvvspEQJHHhQzNSU/S8TI=
+  dependencies:
+    regenerator-runtime "^0.13.2"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.npm.taobao.org/@mrmlnc/readdir-enhanced/download/@mrmlnc/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -84,6 +91,11 @@
   version "1.37.0"
   resolved "https://registry.npm.taobao.org/@types/vscode/download/@types/vscode-1.37.0.tgz#fb26ffabfabcd50ba70e8b454122a91b84548080"
   integrity sha1-+yb/q/q81QunDotFQSKpG4RUgIA=
+
+"@types/yaml@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npm.taobao.org/@types/yaml/download/@types/yaml-1.0.2.tgz#bba080d64714c6ef3eaa023e235dacd2cfa3c938"
+  integrity sha1-u6CA1kcUxu8+qgI+I12s0s+jyTg=
 
 agent-base@4, agent-base@^4.3.0:
   version "4.3.0"
@@ -1505,6 +1517,11 @@ readable-stream@^3.1.1:
     string_decoder "^1.1.1"
     util-deprecate "^1.0.1"
 
+regenerator-runtime@^0.13.2:
+  version "0.13.3"
+  resolved "https://registry.npm.taobao.org/regenerator-runtime/download/regenerator-runtime-0.13.3.tgz#7cf6a77d8f5c6f60eb73c5fc1955b2ceb01e6bf5"
+  integrity sha1-fPanfY9cb2Drc8X8GVWyzrAea/U=
+
 regex-not@^1.0.0, regex-not@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/regex-not/download/regex-not-1.0.2.tgz#1f4ece27e00b0b65e0247a6810e6a85d83a5752c"
@@ -1985,6 +2002,13 @@ wrappy@1:
   version "4.0.0"
   resolved "https://registry.npm.taobao.org/y18n/download/y18n-4.0.0.tgz#95ef94f85ecc81d007c264e190a120f0a3c8566b"
   integrity sha1-le+U+F7MgdAHwmThkKEg8KPIVms=
+
+yaml@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.npm.taobao.org/yaml/download/yaml-1.6.0.tgz?cache=0&sync_timestamp=1560161695311&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fyaml%2Fdownload%2Fyaml-1.6.0.tgz#d8a985cfb26086dd73f91c637f6e6bc909fddd3c"
+  integrity sha1-2KmFz7Jght1z+Rxjf25ryQn93Tw=
+  dependencies:
+    "@babel/runtime" "^7.4.5"
 
 yargs-parser@13.0.0:
   version "13.0.0"
