@@ -2,7 +2,7 @@
   "name": "vue-i18n",
   "displayName": "Vue i18n",
   "description": "🔖 这个插件能够帮到你方便浏览和编写 Vue i18n",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "publisher": "think2011",
   "engines": {
     "vscode": "^1.37.0"
@@ -90,7 +90,7 @@
     }
   },
   "scripts": {
-    "preinstall": "git submodule update --init --recursive",
+    "preinstall": "git submodule update --init --recursive && cd src/core && yarn",
     "deploy": "vsce publish --yarn",
     "vscode:prepublish": "yarn run compile",
     "compile": "tsc -p ./",
