@@ -18,6 +18,6 @@ export const isVueProject = (): boolean => {
 
     return !!dependencies['vue-i18n'] || !!devDependencies['vue-i18n']
   } catch (err) {
-    Log.error(err)
+    Log.error(err, false)
   }
 }
