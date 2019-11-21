@@ -8,7 +8,7 @@ Config.extName = 'vue-i18n'
 import Log from './core/Log'
 import * as coreCommandsModules from './core/commands'
 
-import { isVueProject } from './Utils'
+import { isVueProject } from './utils'
 import * as editorModules from './editor'
 
 type ModuleType = (
