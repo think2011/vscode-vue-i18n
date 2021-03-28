@@ -90,6 +90,16 @@
           "default": "",
           "description": "翻译文件的目录（相对于项目根目录）"
         },
+        "vue-i18n.i18nCommonPath": {
+          "type": "string",
+          "default": "",
+          "description": "公用翻译文件的目录（相对于项目根目录）。在未找到翻译项时，插件会尝试到该目录下寻找"
+        },
+        "vue-i18n.filenameToKebabCase": {
+          "type": "boolean",
+          "default": false,
+          "description": "如果找不到翻译文件，是否尝试将文件名转化为短横线命名格式再次查找"
+        },
         "vue-i18n.sourceLocale": {
           "type": "string",
           "default": "zh-CN",
