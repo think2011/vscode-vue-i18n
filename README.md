@@ -9,7 +9,6 @@
 <a href="https://marketplace.visualstudio.com/items?itemName=think2011.vue-i18n"><img src="https://img.shields.io/visual-studio-marketplace/i/think2011.vue-i18n.svg" alt="Visual Studio Marketplace Installs" /></a>
 </p>
 
-
 <p align="center">
 为什么要做这个插件？因为写 i18n 真的很啰嗦很麻烦啊 😫
 </p>
@@ -21,21 +20,23 @@
 <h2 align="center"> ⚡ 主要功能 </h2>
 
 ### 提取并自动翻译文案 (快捷键 ⌘+.)
+
 ![](static/demo.png)
 
 ### 直观的看到对应的翻译文案
+
 ![](static/demo1.png)
 
 ### 通过翻译中心管理翻译
-![](static/demo2.gif)
 
+![](static/demo2.gif)
 
 <h2 align="center"> 🦉 如何使用? </h2>
 
 ### 1. 首先你的目录应该是类似这样的结构
 
 ```
-  locales 
+  locales
   ├── en.json
   ├── zh-CN.json
   ├── zh-TW.json
@@ -74,7 +75,7 @@
 - [x] 翻译注释
 - [x] 翻译中心
 - [x] 删除多个语言
-- [x] google、youdao、baidu在线翻译
+- [x] google、youdao、baidu 在线翻译
 - [x] 字段补全
 - [x] 自动配置翻译目录
 - [x] 手动配置翻译目录
@@ -92,11 +93,12 @@
 
 估计很长一段时间里都比较忙，而且懒，如果你遇到了**实在难以解决的问题**或者非要~~提需求~~ **吐槽**，那你给我发封邮件吧 <452125301.hzplay@gmail.com>，要是可以贡献 PR 那真的太棒了 🙂
 
-## 👏特别感谢
+## 👏 特别感谢
 
 谢谢你帮忙完善了插件
 
 - @antfu
 - @lanten
+- @jiezi19971225
 
-> ✨同时也推荐功能更为强大的 [vue-i18n-ally@antfu](https://github.com/antfu/vue-i18n-ally)
+> ✨ 同时也推荐功能更为强大的 [vue-i18n-ally@antfu](https://github.com/antfu/vue-i18n-ally)
