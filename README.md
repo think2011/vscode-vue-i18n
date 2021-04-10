@@ -97,8 +97,8 @@
 
 谢谢你帮忙完善了插件
 
-- @antfu
-- @lanten
-- @jiezi19971225
+- [@antfu](http://github.com/antfu)
+- [@lanten](http://github.com/lanten)
+- [@jiezi19971225](http://github.com/jiezi19971225)
 
 > ✨ 同时也推荐功能更为强大的 [vue-i18n-ally@antfu](https://github.com/antfu/vue-i18n-ally)
