@@ -15,7 +15,7 @@ type ModuleType = (
   ctx: vscode.ExtensionContext
 ) => vscode.Disposable | vscode.Disposable[]
 
-process.on('uncaughtException', function(err) {
+process.on('uncaughtException', function (err) {
   Log.error(err, false)
 })
 
