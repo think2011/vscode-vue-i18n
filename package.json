@@ -124,7 +124,7 @@
   },
   "dependencies": {
     "fast-glob": "^2.2.6",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "translation.js": "^0.7.5",
     "yaml": "^1.6.0"
   }
