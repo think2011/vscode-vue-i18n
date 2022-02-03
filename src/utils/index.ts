@@ -3,7 +3,7 @@ import Log from '../core/Log'
 
 export * from './KeyDetector'
 
-export const KEY_REG = /(?:\$t|\$tc|\$d|\$n|\$te|this\.t|i18n\.t|[^\w]t)\(['"]([^]+?)['"]/g
+export const KEY_REG = /(?:\$t|\$tc|\$d|\$n|\$te|this\.t|i18n\.t|[^\w]t)\(['"]([^]]+?)['"]/g
 
 export const isVueProject = (): boolean => {
   const mainProject = vscode.workspace.workspaceFolders[0]
